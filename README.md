@@ -1,13 +1,13 @@
-<!---
-just checking what's goint on in markdown. does it suck? does it not?
-I don't know. let's find out!
--->
+<!---   so comments work. that's interesting.
+        it also did what I wanted. that's a first. -->
 
 #kitten projects
 Just having a bit of fun with the
 [Kitten programming language](https://github.com/evincarofautumn/kitten).
 
 I also have tried (and failed) to make a Syntastic plugin for Kitten.
+
+You can play around with what I wrote by using `:l filename.ktn` in the REPL.
 
 I've found it really interesting both as a functional programming language
 and a concatenative one. I found the functional part easy, having experience
