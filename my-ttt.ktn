@@ -1,0 +1,138 @@
+/* tic tac toe stuff */
+
+//define gameLoop (->) {
+//    { noWinner } loopWhile
+//}
+
+//define noWinner (-> bool) {
+//    if ()
+//}
+
+define move (int char [[char]] -> [[char]]) {
+    -> place p board;
+    if (place = 1):
+        (0, 0) -> toPut;
+        board toPut p (!!=)
+    if (place = 2):
+        (0, 1) -> toPut;
+        board toPut p (!!=)
+    if (place = 3):
+        (0, 2) -> toPut;
+        board toPut p (!!=)
+
+    if (place = 4):
+        (1, 0) -> toPut;
+        board toPut p (!!=)
+    if (place = 5):
+        (1, 1) -> toPut;
+        board toPut p (!!=)
+    if (place = 6):
+        (1, 2) -> toPut;
+        board toPut p (!!=)
+
+    if (place = 7):
+        (2, 0) -> toPut;
+        board toPut p (!!=)
+    if (place = 8):
+        (2, 1) -> toPut;
+        board toPut p (!!=)
+    if (place = 9):
+        (2, 2) -> toPut;
+        board toPut p (!!=)
+
+    board
+}
+
+define checkWinner ([[char]] -> char) {
+    -> board; //not sure about dup yet
+
+    0 board checkCols -> c0; //"col0: " c0 vector cat say
+    1 board checkCols -> c1; //"col1: " c1 vector cat say
+    2 board checkCols -> c2; //"col2: " c2 vector cat say
+
+    0 board checkRows -> r0; //"row0: " r0 vector cat say
+    1 board checkRows -> r1; //"row1: " r1 vector cat say
+    2 board checkRows -> r2; //"row2: " r2 vector cat say
+
+    0 board checkDiags -> d0; //"dig0: " d0 vector cat say
+    1 board checkDiags -> d1; //"dig0: " d0 vector cat say
+
+    [c0, c1, c2, r0, r1, r2, d0, d1] -> winners;
+
+    if (winners 'x' elemChar):
+        "x wins!" say
+        'x'
+    else:
+        if (winners 'o' elemChar):
+            "o wins!" say
+            'o'
+        else:
+            "no one wins!" say
+            '*'
+}
+
+define myError ([char] ->) {
+    -> message;
+    ["error: ", message, "\n"] concat stderr handlePrint
+}
+
+define newBoard (-> [char]) {
+    ' ' 9 replicate
+}
+
+define checkCols (int [[char]] -> char) {
+    -> col board;
+    if ([(col > 2), (col < 0)] or):
+        "col out of bounds: " myError
+        col sayInt
+        '!'
+    else:
+        board (0, col) (!!) -> v0;
+        board (1, col) (!!) -> v1;
+        board (2, col) (!!) -> v2;
+        if ([(v0 v1 eqChar), (v0 v2 eqChar), (v1 v2 eqChar)] and):
+            v0
+        else:
+            '*'
+}
+
+define checkRows (int [[char]] -> char) {
+    -> row board;
+    if ([(row > 2), (row < 0)] or):
+        "row out of bounds: " myError
+        row sayInt
+        '!'
+    else:
+        board (row, 0) (!!) -> r0;
+        board (row, 1) (!!) -> r1;
+        board (row, 2) (!!) -> r2;
+        if ([(r0 r1 eqChar), (r0 r2 eqChar), (r1 r2 eqChar)] and):
+            r0
+        else:
+            '*'
+}
+
+define checkDiags (int [[char]] -> char) {
+    -> diag board;
+    if ([(diag > 1), (diag < 0)] or):
+        "diag out of bouds: " myError
+        diag sayInt
+        '!'
+    else:
+        if (diag = 0):
+            board (0, 0) (!!) -> d0;
+            board (1, 1) (!!) -> d1;
+            board (2, 2) (!!) -> d2;
+            if ([(d0 d1 eqChar), (d0 d2 eqChar), (d1 d2 eqChar)] and):
+                d0
+            else:
+                '*'
+        else:
+            board (0, 2) (!!) -> d0;
+            board (1, 1) (!!) -> d1;
+            board (2, 0) (!!) -> d2;
+            if ([(d0 d1 eqChar), (d0 d2 eqChar), (d1 d2 eqChar)] and):
+                d0
+            else:
+                '*'
+}

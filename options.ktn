@@ -1,0 +1,27 @@
+"hello!" some -> test;
+option (test):
+    say
+else:
+    "hejweoijo" say
+
+none -> tast;
+option (tast):
+    say
+else:
+    "nonearoo" say
+
+3 -> i;
+if (i = 0):
+    "i is 0" say
+if (i = 2):
+    "i is 2" say
+if (i = 3):
+    "i is 3" say
+
+2 -> asdf;
+if (asdf = 1):
+    "asdf is 1" say
+else:
+    "asdf semicolon" say
+
+"done" say

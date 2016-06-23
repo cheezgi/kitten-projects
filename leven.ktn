@@ -1,0 +1,142 @@
+
+define levenshtein ([char] [char] -> int) {
+  -> first second;
+  first length -> rows;
+  second length -> columns;
+
+  0 (columns + 1) replicate (rows + 1) replicate
+
+  from (0) to (rows) -> row:
+    (row, 0) !!= row
+
+  from (0) to (columns) -> column:
+    (0, column) !!= column
+
+  from (1) to (rows) -> row:
+    from (1) to (columns) -> distances column:
+      first ! (row - 1) -> firstChar;
+      second ! (column - 1) -> secondChar;
+
+      distances
+      if (firstChar secondChar eqChar):
+        distances !! (row - 1, column - 1)
+      else:
+        (distances !! (row - 1, column))      // deletion
+        (distances !! (row,     column - 1))  // insertion
+        (distances !! (row - 1, column - 1))  // substitution
+        minInt3 (+ 1)
+      ((row, column) !!=)
+
+  (!! (rows, columns))
+}
+
+//"kitten" "sitting" levenshtein sayInt
+//"rosettacode" "raisethysword" levenshtein sayInt
+
+// defining infix operators is kind of wierd
+// it seems like it doesn't allow symbols?
+infix right 1 #
+define # (int int -> int) {
+    -> a b;
+    (a + b) * 7 -> c;
+    a + b + c
+}
+
+// really torn on comment style right now
+
+/* syntax error:
+ * infix right 1 ayy
+ * not syntax error: */
+define ayy (int int -> int) {
+    -> a b;
+    (a + b) * 7 -> c;
+    a + b + c
+}
+
+// more operators?
+//infix left 2 %^&&&
+//define %^&&& <a> ([a] -> int) {
+//    dup length   // get length of vector
+//    1 (-) 2 (/)  // get index of vector
+//    (!)          // index the vector
+//}
+
+// push the front value to the back
+define frontback<a> ([a] -> [a]) {
+    dup head fromSome // get first in vector
+    append tail       // push value to end, remove head
+}
+
+// push the back value to the front
+define backfront<a> ([a] -> [a]) {
+    reverse dup head fromSome // get last in vector, reverse
+    append tail reverse       // append last to front, reverse
+}
+
+// produce stderr message without exiting
+define myError ([char] ->) {
+    -> message;
+    ["error: ", message, "\n"] concat stderr handlePrint
+}
+
+//3 -> i;
+//i + 1 sayInt
+
+//tic tac toe stuff
+define checkCols (int [[char]] -> char) {
+    -> col board;
+    if ([(col > 2), (col < 0)] or):
+        "col out of bounds: " myError
+        col sayInt
+        '!'
+    else:
+        board (0, col) (!!) -> v0;
+        board (1, col) (!!) -> v1;
+        board (2, col) (!!) -> v2;
+        if ([(v0 v1 eqChar), (v0 v2 eqChar), (v1 v2 eqChar)] and):
+            v0
+        else:
+            '*'
+}
+
+define checkRows ([[char]] int -> char) {
+    -> board row;
+    if ([(row > 2), (row < 0)] or):
+        "row out of bounds: " myError
+        row sayInt
+        '!'
+    else:
+        board (row, 0) (!!) -> r0;
+        board (row, 1) (!!) -> r1;
+        board (row, 2) (!!) -> r2;
+        if ([(r0 r1 eqChar), (r0 r2 eqChar), (r1 r2 eqChar)] and):
+            r0
+        else:
+            '*'
+}
+
+define checkDiags ([[char]] int -> char) {
+    -> board diag;
+    if ([(diag > 1), (diag < 0)] or):
+        "diag out of bouds: " myError
+        diag sayInt
+        '!'
+    else:
+        if (diag = 0):
+            board (0, 0) (!!) -> d0;
+            board (1, 1) (!!) -> d1;
+            board (2, 2) (!!) -> d2;
+            if ([(d0 d1 eqChar), (d0 d2 eqChar), (d1 d2 eqChar)] and):
+                d0
+            else:
+                '*'
+        else:
+            board (0, 2) (!!) -> d0;
+            board (1, 1) (!!) -> d1;
+            board (2, 0) (!!) -> d2;
+            if ([(d0 d1 eqChar), (d0 d2 eqChar), (d1 d2 eqChar)] and):
+                d0
+            else:
+                '*'
+}
+

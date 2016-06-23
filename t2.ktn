@@ -1,0 +1,231 @@
+// actual working tic tac toe
+// that I kind of understand :P
+// it's kind of terrible
+
+// error message that doesn't exit the program
+define myerr([char] ->) {
+    -> message;
+    ["error: ", message, "\n"] concat stderr handlePrint
+}
+
+// main game loop
+define turn ([char] char ->) {
+    -> board player;
+    board showBoard                                  //print the board
+    "Your turn, " player vector cat ": " cat print   //get input from player
+    board player getMove move -> newBoard;           //place player in spot
+    "" say                                           //newline
+    if (newBoard winners):                           //if there are any winners
+        "Thanks for playing." say                    //print a message
+        newBoard showBoard                           //print the board
+    else:                                            //otherwise
+        newBoard player nextPlayer turn              //go to next loop
+}
+
+//create a new board
+define createBoard (-> [char]) {
+    ' ' 9 replicate
+}
+
+//switch between x and o
+define nextPlayer (char -> char) {
+    -> p;
+    if (p 'x' eqChar):
+        'o'
+    else:
+        'x'
+}
+
+// print the board
+define showBoard ([char] ->) {
+    3 splitAt 3 splitAt          //split the board into groups of three in reverse
+    " 123" cat vector swap       //append numbers to each row of the board
+    " 456" cat append swap       //by swapping/appending to a vector
+    " 789" cat append reverse    //reverse the vector
+    \say each                    //print each item in the vector
+}
+
+// check if there are winners
+define winners ([char] -> bool) {
+    -> board;
+    board 'x' 'o' checkWinner -> winner;    //get the winner
+    if (board boardFilled):                 //check if the board is filled
+        if (winner 'x' eqChar):             //check who won
+            "x wins!" say                   //print message
+            true                            //return true if someone won
+        else:
+            if (winner 'o' eqChar):
+                "o wins!" say
+                true
+            else:
+                "No one wins!" say          //the board is filled, no one wins
+                true
+    else:
+        if (winner ' ' eqChar):             //board is not filled, no one won
+            false
+        else:
+            if (winner 'x' eqChar):         //if/else have to be balanced
+                "x wins!" say               //as far as I can tell
+                true
+            else:
+                if (winner 'o' eqChar):
+                    "o wins!" say
+                    true
+                else:
+                    "Something fucky happened" say
+                    true
+}
+
+// check if the board is filled
+define boardFilled ([char] -> bool) {
+    -> board;
+    if (board ' ' elemChar not):        //board isn't filled if it has
+        true                            //any spaces at all
+    else:
+        false
+}
+
+// convert player's choice to a literal integer
+define getMove (-> int) {
+    getLine head fromSome charToInt 48 (-)
+}
+
+// place player in a spot
+define move ([char] char int -> [char]) {
+    -> board player place;
+    board (place convert 1 (-)) player (.=)     //set the board place to player
+}
+
+// convert for convenience: my number pad has 1 at the bottom left
+define convert (int -> int) {
+    -> p;
+    if (p = 1) { 7 } else {     //for purposes of being consistent with
+    if (p = 2) { 8 } else {     //printing, I change the numbers around
+    if (p = 3) { 9 } else {
+    if (p = 7) { 1 } else {
+    if (p = 8) { 2 } else {
+    if (p = 9) { 3 } else {
+        p
+    }}}}}}                      //this really causes me pain
+}
+
+// check for a winner on every row/column/diagonal
+define checkWinner ([char] char char -> char) {
+    -> board p1 p2;
+    board 0 checkCols -> c0;    //store the result of every column/row/diagonal
+    board 1 checkCols -> c1;
+    board 2 checkCols -> c2;
+
+    board 0 checkRows -> r0;
+    board 1 checkRows -> r1;
+    board 2 checkRows -> r2;
+
+    board 0 checkDiag -> d0;
+    board 1 checkDiag -> d1;
+
+    [c0, c1, c2, r0, r1, r2, d0, d1] -> winners;    //convert it to a string
+
+    if (winners p1 elemChar):       //check if a player is a part of the string
+        p1
+    else:
+        if (winners p2 elemChar):
+            p2
+        else:
+            if (winners '!' elemChar):
+                "An error has occured." say
+                '!'
+            else:
+                ' '
+}
+
+// check columns
+define checkCols ([char] int -> char) {
+    -> board col;
+
+    if ([(col > 2), (col < 0)] or):     //prevent out of range errors
+        "col out of bounds" myerr
+        col sayInt
+        '!'
+    else:
+        board col       (!) -> c0;      //originally this was a 2d string
+        board (col + 3) (!) -> c1;      //but it was too hard to follow
+        board (col + 6) (!) -> c2;      //logically, so it was changed
+
+        if ([(c0 c1 eqChar), (c0 c2 eqChar), (c1 c2 eqChar)] and):
+            c0
+        else:
+            ' '
+}
+
+// check rows
+define checkRows ([char] int -> char) {
+    -> board row;
+
+    if ([(row > 2), (row < 0)] or):
+        "row out of bounds" myerr
+        row sayInt
+        '!'
+    else:
+        board (row 3 (*))       (!) -> r0;
+        board (row 3 (*) 1 (+)) (!) -> r1;
+        board (row 3 (*) 2 (+)) (!) -> r2;
+
+        if ([(r0 r1 eqChar), (r0 r2 eqChar), (r1 r2 eqChar)] and):
+            r1
+        else:
+            ' '
+}
+
+// check diagonals
+define checkDiag ([char] int -> char) {
+    -> board diag;
+
+    if ([(diag > 1), (diag < 0)] or):
+        "diag out of bounds" myerr
+        diag sayInt
+        '!'
+    else:
+        if (diag = 0):              //no fancy math here :C
+            board 0 (!) -> d0;
+            board 4 (!) -> d1;
+            board 8 (!) -> d2;
+            if ([(d0 d1 eqChar), (d0 d2 eqChar), (d1 d2 eqChar)] and):
+                d0
+            else:
+                ' '
+        else:
+            board 2 (!) -> d0;
+            board 4 (!) -> d1;
+            board 6 (!) -> d2;
+            if ([(d0 d1 eqChar), (d0 d2 eqChar), (d1 d2 eqChar)] and):
+                d0
+            else:
+                ' '
+}
+
+// test everything, unfortunately not all cases are covered
+define doTests (->) {
+    if ("x**x**x**" 'x' 'o' checkWinner 'x' eqChar):
+        "test passed: 'x**x**x**'" say
+    else:
+        "test failed: 'x**x**x**'" myerr
+
+    if ("xxx******" 'x' 'o' checkWinner 'x' eqChar):
+        "test passed: 'xxx******'" say
+    else:
+        "test failed: 'xxx******'" myerr
+
+    if ("x***x***x" 'x' 'o' checkWinner 'x' eqChar):
+        "test passed: 'x***x***x'" say
+    else:
+        "test failed: x***x***x" myerr
+
+    if ("**x*x*x**" 'x' 'o' checkWinner 'x' eqChar):
+        "test passed: **x*x*x**" say
+    else:
+        "test failed: **x*x*x**" myerr
+}
+
+// start game
+"Tic Tac Toe!" say
+createBoard 'x' turn    //create a new board, start with xes first
