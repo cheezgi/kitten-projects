@@ -7,6 +7,8 @@ I don't know. let's find out!
 Just having a bit of fun with the
 [Kitten programming language](https://github.com/evincarofautumn/kitten).
 
+I also have tried (and failed) to make a Syntastic plugin for Kitten.
+
 I've found it really interesting both as a functional programming language
 and a concatenative one. I found the functional part easy, having experience
 (however limited) with Scheme, but the concatenative part was something to
