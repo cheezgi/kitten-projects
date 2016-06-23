@@ -74,12 +74,39 @@ I'm pleasantly surprised by how much I like it so far:
     with `-> var` is an incredibly powerful feature that I really like so far.
 
 There are also a few problems I have with Kitten, however having no experience
-in Haskell, I am unable to contribute.
+in Haskell, I am unable to contribute. Kitten is a very young language, so
+it has its fair share of quirks and bugs, but I'm willing to work around them
+to accomplish stuff.
 
 Firstly:
 
 *   No documentation. This is something that is being worked on, and something
-    that I would be willing to contribute (though I am no technical writer)
+    that I would be willing to contribute (though I am no technical writer).
+    The information that I have gleaned comes from reading the Kitten prelude
+    library.
+
+*   The REPL is slightly annoying to work with. Since using the whitespace
+    method of function definition and if/else requires newlines, the REPL
+    throws an error when it sees that there is no body to the `if`. You will
+    have to use braces to define functions/use if/else in the REPL.
+
+    Local variables also do not last for more than one line. If you pull
+    something off the stack with `-> something;`, it was just eaten. It's
+    almost as if a new scope is introduced every line.
+
+    Keep in mind that these problems only exist in the REPL. Interpreting your
+    program is all good.
+
+*   The compiler is slightly buggy. I tried to compile the 99 bottles of beer
+    example as 9999 bottles of beer, and it crashed with some sorf of
+    type error after about 1000. Interpretatiton is also painfully slow, with
+    said 9999 bottles of beer taking almost an entire minute to complete.
+    If your program works as intended when compiled, it is much faster however.
+
+*   Lack of solid control flow. Recursion is possible, so I'm able to easily
+    implement loops *my* way, but using `{ stuff } loopWhile` to push a
+    function to the stack feels clunky and difficult to work with. There is
+    also no `else if` which is... interesting.
 
 *   The semicolon `;` rules are confusing. This can lead to some unhelpful
     error messages if you don't understand them, which I didn't. For example:
@@ -117,3 +144,11 @@ Firstly:
                      ' '
 
     Again, documentation would really clear this up.
+
+I don't want this to be a blog post, but apparently people do that with GH
+pages.
+
+Thanks to /r/programming for introducing me to this language. I've learned a
+lot about language design while working with Kitten, and I really want it to
+succeed. I might even learn Haskell to help contribute.
+
