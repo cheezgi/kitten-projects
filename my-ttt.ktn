@@ -1,4 +1,5 @@
 /* tic tac toe stuff */
+// this doesn't work btw, it has caused me pain
 
 //define gameLoop (->) {
 //    { noWinner } loopWhile
