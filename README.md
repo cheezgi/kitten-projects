@@ -115,3 +115,5 @@ Firstly:
                         '!'
                     else:
                      ' '
+
+    Again, documentation would really clear this up.
