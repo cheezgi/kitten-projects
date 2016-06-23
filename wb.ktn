@@ -1,0 +1,14 @@
+define whitespace (->):
+    "this uses whitespace!" say
+    if (true):
+        "whitespace, neat" say
+
+define braces (->) {
+    "this uses braces!" say
+    if (true) {
+        "braces, neat!" say
+    }
+}
+
+whitespace
+braces

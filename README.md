@@ -103,11 +103,6 @@ Firstly:
     said 9999 bottles of beer taking almost an entire minute to complete.
     If your program works as intended when compiled, it is much faster however.
 
-*   Lack of solid control flow. Recursion is possible, so I'm able to easily
-    implement loops *my* way, but using `{ stuff } loopWhile` to push a
-    function to the stack feels clunky and difficult to work with. There is
-    also no `else if` which is... interesting.
-
 *   The semicolon `;` rules are confusing. This can lead to some unhelpful
     error messages if you don't understand them, which I didn't. For example:
 
