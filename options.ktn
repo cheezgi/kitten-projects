@@ -24,4 +24,6 @@ if (asdf = 1):
 else:
     "asdf semicolon" say
 
-"done" say
+0 -> zero;
+10 -> ten;
+

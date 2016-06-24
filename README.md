@@ -13,7 +13,7 @@ I've found it really interesting both as a functional programming language
 and a concatenative one. I found the functional part easy, having experience
 (however limited) with Scheme, but the concatenative part was something to
 get used to. The concatenative aspect of Kitten reminded me of my programming
-language, [juggle](htts://github.com/cheezgi/juggle), stringing together
+language, [juggle](https://github.com/cheezgi/juggle), stringing together
 commands.
 
 I'm pleasantly surprised by how much I like it so far:
