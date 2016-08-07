@@ -93,7 +93,11 @@ define getMove (-> int) {
 // place player in a spot
 define move ([char] char int -> [char]) {
     -> board player place;
-    board (place convert 1 (-)) player (.=)     //set the board place to player
+    if (board place convert 1 (-) (!) "xo" swap elemChar not):
+        board (place convert 1 (-)) player (.=)     //set the board place to player
+    else:
+        "Can't move there! There's already a player. Your turn has been skipped!" say
+        board
 }
 
 // convert for convenience: my number pad has 1 at the bottom left
@@ -224,6 +228,11 @@ define doTests (->) {
         "test passed: **x*x*x**" say
     else:
         "test failed: **x*x*x**" myerr
+
+    if ("******o**" 'x' 1 move "******o**" eqString):
+        "test passed: can't move to same place" say
+    else:
+        "test failed: can move to same place" say
 }
 
 // start game
